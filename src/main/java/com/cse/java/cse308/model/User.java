@@ -1,13 +1,8 @@
 package com.cse.java.cse308.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-
 
 @Entity
 @Table
@@ -16,15 +11,13 @@ public class User {
 	
 	private String userName;
 	
-	
 	private String password;
 	
+	private int workStatus;
 	
 	private int canvasserRole;
 	
-	
 	private int systemRole;
-	
 	
 	private int managerRole;
 	
@@ -83,12 +76,20 @@ public class User {
 	public void setManagerRole(int ManagerRole) {
 		this.managerRole = ManagerRole;
 	}
-	
-	
+
+	public int getWorkStatus() {
+		return workStatus;
+	}
+
+	public void setWorkStatus(int workStatus) {
+		this.workStatus = workStatus;
+	}
+
 	@Override
 	public String toString() {
-		return "User : " + userName + ", Password: " + password;
+		return "User [userName=" + userName + ", password=" + password + ", workStatus=" + workStatus
+				+ ", canvasserRole=" + canvasserRole + ", systemRole=" + systemRole + ", managerRole=" + managerRole
+				+ "]";
 	}
-	
 }
 	

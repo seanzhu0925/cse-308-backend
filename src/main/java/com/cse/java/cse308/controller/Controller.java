@@ -10,17 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cse.java.cse308.model.Person;
 import com.cse.java.cse308.model.User;
+import com.cse.java.cse308.model.UserDetailsRequestModel;
 import com.cse.java.cse308.persistance.PersonRepository;
 import com.cse.java.cse308.persistance.UserRepository;
 import com.cse.java.cse308.service.PersonService;
+import com.cse.java.cse308.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://10.1.138.226")
+@CrossOrigin(origins = "http://http://localhost:8000/")
 public class Controller {
 	
 	 @Autowired
@@ -29,6 +33,8 @@ public class Controller {
 	 private PersonRepository personRepository;
 	 @Autowired
 	 private UserRepository userRepository;
+	 @Autowired
+	 private UserService userService;
 
 	@RequestMapping("/")
 	public String getToHomePage() {
@@ -36,33 +42,27 @@ public class Controller {
 
 	}
 
-	@RequestMapping("/save/person/{salary}/{ssn}")
-	public String savePerson(@PathVariable String salary, @PathVariable String ssn) {
-		Person per1 = new Person();
-		per1.setSalary(salary);
-		per1.setAddress("8 Sophomore Ln, Stony Brook, 11790");
-		per1.setFirstName("Keyu");
-		per1.setLastName("Zhang Zhang");
-		per1.setSsn(ssn);
-		personService.savePerson(per1);
-		return "Person is saved in DB:----" + per1.toString();
+	@GetMapping("/get/users")
+	public List<User> getUsers() {
+		return userService.getAllUsers();
 	}
 	
-	@RequestMapping("/save/user/{username}/{password}/{man}/{can}/{sys}")
-	public String saveUser(@PathVariable String username, @PathVariable String password,
-			@PathVariable String man,@PathVariable String can, @PathVariable String sys) {
-		User user = new User();
-		user.setUserName(username);
-		user.setPassword(password);
-		int man1 = Integer.parseInt(man);
-		user.setManagerRole(man1);
-		int can1 = Integer.parseInt(can);
-		user.setCanvasserRole(can1);
-		int sys1 = Integer.parseInt(sys);
-		user.setSystemRole(sys1);
-		userRepository.save(user);
-		return "User " + user.getUserName() + " is saved in DB";
-		
+	@PostMapping("/create/user")
+	public boolean creaetNewUser(@RequestBody UserDetailsRequestModel requestUserDetails) {
+		User user = userRepository.findByUserName(requestUserDetails.getUserName());
+		if(user == null) {
+			user = new User();
+			user.setUserName(requestUserDetails.getUserName());
+			user.setPassword(requestUserDetails.getPassword());
+			user.setCanvasserRole(Integer.parseInt(requestUserDetails.getCanvasserRole()));
+			user.setManagerRole(Integer.parseInt(requestUserDetails.getManagerRole()));
+			user.setSystemRole(Integer.parseInt(requestUserDetails.getSystemRole()));
+			user.setWorkStatus(Integer.parseInt(requestUserDetails.getWorkStatus()));
+			userService.saveUser(user);
+			return true;
+		}else {
+			return false;
+		}		
 	}
 	
 	@RequestMapping("/delete/user/{username}")
