@@ -11,7 +11,7 @@ import com.cse.java.cse308.persistance.PersonRepository;
 import com.cse.java.cse308.service.PersonService;
 
 @RestController
-@CrossOrigin(origins = "http://10.1.158.244")
+@CrossOrigin(origins = "http://localhost:8080")
 public class Controller {
 
 	@Autowired
