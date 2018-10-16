@@ -2,6 +2,8 @@ package com.cse.java.cse308.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +26,8 @@ import com.cse.java.cse308.service.UserService;
 @RestController
 @CrossOrigin(origins = "http://http://localhost:8000/")
 public class Controller {
+	
+	private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
 	@Autowired
 	private PersonService personService;
@@ -42,11 +46,13 @@ public class Controller {
 
 	@GetMapping("/get/users")
 	public List<User> getUsers() {
+		logger.info("Retrieved ALl Users From Database");
 		return userService.getAllUsers();
 	}
 
 	@PostMapping("/create/user")
 	public boolean creaetNewUser(@RequestBody UserDetailsRequestModel requestUserDetails) {
+		logger.info("Create new user: " + requestUserDetails);
 		User user = userRepository.findByUserName(requestUserDetails.getUserName());
 		if (user == null) {
 			user = new User();
@@ -57,8 +63,10 @@ public class Controller {
 			user.setSystemRole(Integer.parseInt(requestUserDetails.getSystemRole()));
 			user.setWorkStatus(Integer.parseInt(requestUserDetails.getWorkStatus()));
 			userService.saveUser(user);
+			logger.info("New user has been saved in database");
 			return true;
 		} else {
+			logger.info("Duplicate user!");
 			return false;
 		}
 	}

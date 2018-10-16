@@ -62,9 +62,11 @@ public class UserDetailsRequestModel {
 		this.managerRole = managerRole;
 	}
 
-
-
-	
-	
+	@Override
+	public String toString() {
+		return "UserDetailsRequestModel [userName=" + userName + ", password=" + password + ", workStatus=" + workStatus
+				+ ", canvasserRole=" + canvasserRole + ", systemRole=" + systemRole + ", managerRole=" + managerRole
+				+ "]";
+	}
 
 }

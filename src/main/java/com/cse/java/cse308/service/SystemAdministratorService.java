@@ -21,7 +21,7 @@ public class SystemAdministratorService {
 	public SystemAdministratorService(SystemAdministratorRepository personRepository) {
 		super();
 		this.personRepository = personRepository;
-	}
+	} 
 	
 	
 	@Transactional
